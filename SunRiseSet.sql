@@ -1,4 +1,4 @@
-DELIMITTER //
+DELIMITER //
 CREATE FUNCTION `SunRiseSet`(
 	`date` DATE,
 	`latitude` FLOAT,
@@ -110,10 +110,10 @@ BEGIN
 
     -- 9. adjust back to UTC
     SET UT = T - lngHour;
-    SET UT = IF(UT > 24.0, UT - 24.0, IF(UT < 0.0, UT + 24.0, UT));
+    SET UT = UT MOD 24;
 
     -- 10. convert UT value to local time zone of latitude/longitude
     RETURN TIME(CONVERT_TZ(CONCAT(DATE(date),' ',SEC_TO_TIME(UT * 3600.0)),'UTC','SYSTEM'));
 END//
 
-DELIMITTER ;
+DELIMITER ;
