@@ -79,12 +79,22 @@ BEGIN
     -- 4. calculate the Sun's true longitude
     SET L = M + (1.916 * SIN(M * D2R)) + (0.020 * SIN(2 * M * D2R)) + 282.634;
     -- NOTE: L potentially needs to be adjusted into the range [0,360) by adding/subtracting 360
-    SET L = IF((L > 360.0), L - 360.0, L + 360.0);
+    WHILE L > 360.0 DO
+        SET L = L - 360.0;
+    END WHILE;
+    WHILE UT < 0.0 DO
+        SET L = L + 360.0;
+    END WHILE;
 
     -- 5a. calculate the Sun's right ascension
     SET RA = R2D * ATAN(0.91764 * TAN(L * D2R));
     -- NOTE: RA potentially needs to be adjusted into the range [0,360) by adding/subtracting 360
-    SET RA = IF((RA > 360), RA - 360, IF(RA < 0, RA + 360, RA));
+    WHILE RA > 360.0 DO
+        SET RA = RA - 360.0;
+    END WHILE;
+    WHILE UT < 0.0 DO
+        SET RA = RA + 360.0;
+    END WHILE;
 
     -- 5b. right ascension value needs to be in the same quadrant as L
     SET Lquadrant = (FLOOR(L / (90.0))) * 90.0;
@@ -110,7 +120,13 @@ BEGIN
 
     -- 9. adjust back to UTC
     SET UT = T - lngHour;
-    SET UT = UT MOD 24;
+    -- NOTE: UT potentially needs to be adjusted into the range [0,24) by adding/subtracting 24
+    WHILE UT > 24.0 DO
+        SET UT = UT - 24.0;
+    END WHILE;
+    WHILE UT < 0.0 DO
+        SET UT = UT + 24.0;
+    END WHILE;
 
     -- 10. convert UT value to local time zone of latitude/longitude
     RETURN TIME(CONVERT_TZ(CONCAT(DATE(date),' ',SEC_TO_TIME(UT * 3600.0)),'UTC','SYSTEM'));
