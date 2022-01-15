@@ -114,7 +114,7 @@ BEGIN
     SET UT = IF(ABS(UT)=UT, UT MOD 24.0, 24.0 + (UT MOD 24.0));
 
     -- 10. convert UT value to local time zone of latitude/longitude
-    RETURN TIME(CONVERT_TZ(CONCAT(DATE(date),' ',SEC_TO_TIME(UT * 3600.0)),'UTC','SYSTEM'));
+    RETURN TIME(CONVERT_TZ(CONCAT(DATE(date),' ',SEC_TO_TIME(UT * 3600.0)),'+00:00','SYSTEM'));
 END//
 
 DELIMITER ;
