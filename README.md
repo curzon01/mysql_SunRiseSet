@@ -4,6 +4,8 @@ MySQL/MariaDB function to calculate the sunrise/sunset time based on date and la
 
 This implementation is based by the algorithm found on http://web.archive.org/web/20161202180207/http://williams.best.vwh.net/sunrise_sunset_algorithm.htm
 
+A more powerful variant can be found as a MySQL Loadable Function implementation under [lib_mysqludf_astro](https://github.com/curzon01/lib_mysqludf_astro).
+
 ## Installation
 
 Execute the code of SunRiseSet.sql, for example
